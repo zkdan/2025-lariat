@@ -7,7 +7,8 @@ export default function FilteredImages() {
   const params: { filter: string } = useParams()
   const { filter } = params;
   
-  const isYear = allYears().includes(parseInt(filter))
+  const isYear = allYears().map(year => year.toString()).includes(filter)
+  
   const isMonth = months.includes(filter)
   const isCover = filter === 'cover'
 

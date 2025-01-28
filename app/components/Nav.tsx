@@ -41,12 +41,13 @@ export default function Nav() {
       <ul className="flex justify-around uppercase flex-wrap text-center">
         <Link
           ref={(el) => { linksRef.current['cover'] = el }}
-
-          className={`${isActive(`/cover`) ? 'underline' : ''} flex-wrap basis-1/3  lg:flex-nowrap lg:basis-1 focus-visible:outline-none 
-          hover:decoration-dotted 
-          focus-visible:decoration-dotted
-          focus:decoration-dotted
-          underline-offset-8 `}
+          className={`${isActive(`/cover`) ? 'underline' : ''} flex-wrap basis-1/3  lg:flex-nowrap lg:basis-1 mb-5 focus-visible:underline 
+              focus-visible:outline-none 
+              hover:underline 
+              focus:underline 
+              hover:decoration-dotted 
+              focus:decoration-dotted 
+              underline-offset-8 `}
           href="/cover">
           <li>cover</li>
         </Link>
@@ -56,7 +57,8 @@ export default function Nav() {
             ref={(el) => { linksRef.current[month] = el }}
 
             className={`${isActive(`/${month}`) ? 'underline' : ''} flex-wrap basis-1/3  lg:flex-nowrap lg:basis-1 mb-5 focus-visible:underline 
-              focus-visible:outline-none hover:underline 
+              focus-visible:outline-none 
+              hover:underline 
               focus:underline 
               hover:decoration-dotted 
               focus:decoration-dotted 
