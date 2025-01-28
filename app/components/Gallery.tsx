@@ -5,13 +5,26 @@ import Nav from "./Nav";
 
 
 export default function Gallery({ filter }: { filter: string }) {
-  const data = imageUrls.flat().filter(img => img.year === parseInt(filter) || img.name === filter)
-  console.log(getBase64(data[0].miniUrl))
+  const raws = imageUrls.flat().filter(img => img.year === parseInt(filter) || img.name === filter)
+
+  const addBlurs = async (arr) => {
+    return arr.map(async (item) => {
+      const dataUrl = await getBase64(item.miniUrl)
+      return {
+        ...item,
+        dataUrl
+      }
+    })
+  }
+  const data = addBlurs(raws)
+
+  console.log(data)
+
   return (
     <>
       <Nav />
       <ul className="flex flex-wrap mx-10 md:mx-20 mt-5 ">
-        {data.map(img => {
+        {/* {data.map(img => {
           return <div key={img.id} className="mb-10  w-[100%] sm:w-[50%] md:w-[25%] ">
             <p className="capitalize text-gray-600  p-1">{`${img.name} ${img.year}`}</p>
             <Link
@@ -37,7 +50,7 @@ export default function Gallery({ filter }: { filter: string }) {
               />
             </Link>
           </div>
-        })}
+        })} */}
 
       </ul>
     </>
