@@ -4,15 +4,15 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'storage.googleapis.com',
-        port: '',
-        pathname: '/lariat-images/**',
-        search: '',
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        port: "",
+        pathname: "/lariat-images/**",
+        search: "",
       },
     ],
   },
 };
 
-export default nextConfig
+export default nextConfig;
 // export default withPlaiceholder(nextConfig);

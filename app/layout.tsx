@@ -5,10 +5,9 @@ import "./globals.css";
 
 const roboto = Roboto({
   variable: "--font-roboto",
-  weight: ['300', "400", '700'],
-  subsets: ['latin']
+  weight: ["300", "400", "700"],
+  subsets: ["latin"],
 });
-
 
 export const metadata: Metadata = {
   title: "Lariat",
@@ -22,12 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.variable} antialiased`}
-      >
+      <body className={`${roboto.variable} antialiased`}>
         <header>
-          <Link className="focus:outline-none focus:text-blue-300 hover:outline-none hover:text-blue-300" href="/">
-            <h1 className="flex justify-around text-5xl font-bold uppercase ">
+          <Link
+            className="hover:text-blue-300 hover:outline-none focus:text-blue-300 focus:outline-none"
+            href="/"
+          >
+            <h1 className="flex justify-around text-5xl font-bold uppercase">
               <span className="letter">l</span>
               <span className="letter">a</span>
               <span className="letter">r</span>

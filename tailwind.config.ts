@@ -8,12 +8,12 @@ export default {
   ],
   theme: {
     fontFamily: {
-      'roboto': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+      roboto: ["Roboto", "Helvetica", "Arial", "sans-serif"],
     },
     extend: {
       colors: {
         background: "var(--background)",
-        foreground: "var(--foreground)"
+        foreground: "var(--foreground)",
       },
     },
   },

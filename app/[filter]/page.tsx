@@ -1,20 +1,22 @@
-'use client'
-import { useParams, redirect } from "next/navigation"
-import { months, allYears } from '@/app/utils/calendar'
-import Gallery from "../components/Gallery"
+"use client";
+import { useParams, redirect } from "next/navigation";
+import { months, allYears } from "@/app/utils/calendar";
+import Gallery from "../components/Gallery";
 
 export default function FilteredImages() {
-  const params: { filter: string } = useParams()
+  const params: { filter: string } = useParams();
   const { filter } = params;
-  
-  const isYear = allYears().map(year => year.toString()).includes(filter)
-  
-  const isMonth = months.includes(filter)
-  const isCover = filter === 'cover'
+
+  const isYear = allYears()
+    .map((year) => year.toString())
+    .includes(filter);
+
+  const isMonth = months.includes(filter);
+  const isCover = filter === "cover";
 
   if (!isYear && !isMonth && !isCover) {
-    redirect('/')
+    redirect("/");
   }
 
-  return <Gallery filter={filter} />
+  return <Gallery filter={filter} />;
 }
