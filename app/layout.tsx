@@ -8,7 +8,8 @@ import Nav from "./components/Nav";
 import Link from "next/link";
 const roboto = Roboto({
   variable: "--font-roboto",
-  weight: ['300', "400", '700']
+  weight: ['300', "400", '700'],
+  subsets:['latin']
 });
 
 
@@ -28,15 +29,15 @@ export default function RootLayout({
         className={`${roboto.variable} antialiased`}
       >
         <header>
-          <Link href="/">
-          <h1 className="flex justify-around text-5xl font-bold uppercase ">
-            <span className="letter">l</span>
-            <span className="letter">a</span>
-            <span className="letter">r</span>
-            <span className="letter">i</span>
-            <span className="letter">a</span>
-            <span className="letter">t</span>
-          </h1>
+          <Link className="focus:outline-none focus:text-blue-300 hover:outline-none hover:text-blue-300" href="/">
+            <h1 className="flex justify-around text-5xl font-bold uppercase ">
+              <span className="letter">l</span>
+              <span className="letter">a</span>
+              <span className="letter">r</span>
+              <span className="letter">i</span>
+              <span className="letter">a</span>
+              <span className="letter">t</span>
+            </h1>
           </Link>
         </header>
         {children}

@@ -14,7 +14,7 @@ export default function Nav(){
     <ul className="flex justify-around text-lg flex-wrap lg:flex-nowrap">
     {allYears().map(year =>
       <Link
-      className={`${isActive(`/${year}`) ? 'outline-dotted' : ''} p-2 my-1 
+      className={`${isActive(`/${year}`) ? 'outline' : ''} p-2 my-1 
       border-1
       outline-1
       text-2xl 
