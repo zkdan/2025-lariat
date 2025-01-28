@@ -7,10 +7,13 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      'roboto': ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+    },
     extend: {
       colors: {
         background: "var(--background)",
-        foreground: "var(--foreground)",
+        foreground: "var(--foreground)"
       },
     },
   },

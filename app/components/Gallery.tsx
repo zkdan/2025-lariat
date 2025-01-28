@@ -1,26 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { imageUrls } from "../utils/constructImageUrls";
-
+import Nav from "./Nav";
 export default function Gallery({filter}:{filter:string}) {
   const data =  imageUrls.flat().filter(img => img.year === parseInt(filter) || img.name === filter)
   
   return (
-    <ul className="flex flex-wrap">
+    <>
+              <Nav />
+
+    
+    <ul className="flex flex-wrap mx-10 md:mx-20 mt-10 ">
         {data.map(img =>{
-        return <Link
-        key={img.id}
-        href={`/?id=${img.id}`}
+        return <div key={img.id} className="mb-10  w-[100%] sm:w-[50%] md:w-[25%] ">
+          <p className="capitalize text-gray-600  p-1">{`${img.name} ${img.year}`}</p>
+        <Link
+        href={`/p/${img.id}`}
         shallow
-        className="
-        cursor-zoom-in
-        basis-1/4
-        "
+        className="w-full"
       >
-        <p>{`${img.name} ${img.year}`}</p>
         <Image
           alt={`Calendar image for ${img.name} ${img.year}`}
-          className="transform  brightness-90 transition will-change-auto group-hover:brightness-110 "
+          className="cursor-zoom-in
+          w-full"
           style={{ transform: "translate3d(0, 0, 0)" }}
           placeholder="blur"
           blurDataURL={'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='}
@@ -33,8 +35,10 @@ export default function Gallery({filter}:{filter:string}) {
                 25vw"
         />
       </Link>
+      </div>
         })}
 
       </ul>
+      </>
   )
 }
