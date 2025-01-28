@@ -1,6 +1,5 @@
-import Gallery from "./components/Gallery"
+import Gallery from "./components/Gallery";
+
 export default async function Home() {
-  return (
-   <Gallery filter={'2023'} />
-  )
+  return <Gallery filter={'2023'} />
 }
