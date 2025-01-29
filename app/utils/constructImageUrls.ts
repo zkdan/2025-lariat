@@ -14,8 +14,17 @@ try {
   return base64
 } catch (err) {
   console.error(err)
-  return null
+  return 'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
 }
+}
+
+export interface IImage {
+  blurUrl?:string;
+  miniUrl:string;
+  medUrl:string;
+  id:string;
+  name:string;
+  year:number;
 }
 
 export default async function constructImageUrls(){
@@ -49,6 +58,7 @@ export default async function constructImageUrls(){
     return imageObjects
   })
   const g = await Promise.all(dataUrlPromises)
+
   const withBlur = images.map((img, i) => {
     return {
       ...img,

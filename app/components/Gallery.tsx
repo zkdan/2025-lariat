@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { imageUrls } from "../utils/constructImageUrls";
+import { imageUrls, IImage } from "../utils/constructImageUrls";
 import Nav from "./Nav";
 export default function Gallery({ filter }: { filter: string }) {
-  const data = imageUrls.flat().filter(img => img.year === parseInt(filter) || img.name === filter)
+  const data: IImage[] = imageUrls.flat().filter(img => img.year === parseInt(filter) || img.name === filter)
 
   return (
     <>
