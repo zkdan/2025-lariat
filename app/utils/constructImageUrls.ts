@@ -48,30 +48,14 @@ export default async function constructImageUrls(){
     })
     return imageObjects
   })
-  await Promise.all(dataUrlPromises)
-  // console.log(dataUrlPromises)
-  // here, go through the resolved promises and stick them into each object in the images array where they go
-  return images
-}
-export const imageUrls = await constructImageUrls()
-
-export async function getCovers(){
-  const thisYear = 2023 
-  // || new Date().getFullYear();
-  const allYears = [];
-
-  for(let i = 2015; i <= thisYear; i++){
-    allYears.push(i)
-  }
-  const covers = allYears.map( (year) =>  {
-  
+  const g = await Promise.all(dataUrlPromises)
+  const withBlur = images.map((img, i) => {
     return {
-      miniUrl: `https://storage.googleapis.com/lariat-images/${year}/cover-${year}-mini.JPG`,
-      medUrl:`https://storage.googleapis.com/lariat-images/${year}/cover-${year}-thumb.JPG`,
-      name: 'cover',
-      year: year,
-      id: `cover-${year}`
+      ...img,
+      blurUrl: g[i]
     }
   })
-  return covers
+  // here, go through the resolved promises and stick them into each object in the images array where they go
+  return withBlur
 }
+export const imageUrls = await constructImageUrls()
