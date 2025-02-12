@@ -2,6 +2,7 @@
 import { usePathname } from "next/navigation"
 import Image from "next/image";
 import { months } from "@/app/utils/calendar";
+import { motion } from "framer-motion";
 
 export default function SinglePhoto() {
   const path = usePathname()
@@ -11,18 +12,25 @@ export default function SinglePhoto() {
   const monthName = months[parseInt(month) - 1]
 
   const data = `https://storage.googleapis.com/lariat-images/${year}/${fileName}-thumb.JPG`
+
   return (<div className="m-10">
     {year && fileName ?
-      <Image
-        src={data}
-        width={700}
-        height={400}
-        alt={`Calendar image for ${monthName} ${year}`}
-        className=" w-full drop-shadow-[35px_35px_35px_rgba(0,0,0,0.5)]"
-        style={{ transform: "translate3d(0, 0, 0)" }}
-        placeholder="blur"
-        blurDataURL={'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='}
-      />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        <Image
+          src={data}
+          width={758}
+          height={379}
+          alt={`Calendar image for ${monthName} ${year}`}
+          className="w-full drop-shadow-[35px_35px_35px_rgba(0,0,0,0.5)]"
+          style={{ transform: "translate3d(0, 0, 0)" }}
+          placeholder="blur"
+          blurDataURL={'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='}
+        />
+      </motion.div>
       :
       null
     }
