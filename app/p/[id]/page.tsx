@@ -18,7 +18,7 @@ export default function SinglePhoto() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
       >
         <Image
           src={data}
@@ -27,8 +27,6 @@ export default function SinglePhoto() {
           alt={`Calendar image for ${monthName} ${year}`}
           className="w-full drop-shadow-[35px_35px_35px_rgba(0,0,0,0.5)]"
           style={{ transform: "translate3d(0, 0, 0)" }}
-          placeholder="blur"
-          blurDataURL={'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='}
         />
       </motion.div>
       :

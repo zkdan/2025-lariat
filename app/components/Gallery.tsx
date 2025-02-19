@@ -28,10 +28,8 @@ export default function Gallery({ filter }: { filter: string }) {
             >
               <Image
                 alt={`Calendar image for ${img.name} ${img.year}`}
-                className="cursor-zoom-in w-full"
+                className="cursor-zoom-in w-full pr-2"
                 style={{ transform: "translate3d(0, 0, 0)" }}
-                placeholder="blur"
-                blurDataURL={'data:image/jpg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='}
                 src={img.miniUrl}
                 width={379}
                 height={293}
