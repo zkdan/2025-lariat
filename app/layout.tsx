@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
-
+import Nav from "./components/Nav";
 const roboto = Roboto({
   variable: "--font-roboto",
   weight: ['300', "400", '700'],
@@ -38,6 +38,7 @@ export default function RootLayout({
             </h1>
           </Link>
         </header>
+        <Nav />
         {children}
       </body>
     </html>
