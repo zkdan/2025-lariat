@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from "next/navigation"
@@ -40,7 +40,7 @@ export default function Nav() {
     }
   }, [isSinglePage]);
 
-  const handleNavigation = (direction: 'prev' | 'next') => {
+  const handleNavigation = useCallback((direction: 'prev' | 'next') => {
     if (!isSinglePage) return;
 
     const currentPath = pathname.split('/p/')[1];
@@ -72,7 +72,7 @@ export default function Nav() {
         router.push(`/p/${(monthNum - 1).toString().padStart(2, '0')}-${yearNum}`);
       }
     }
-  };
+  }, [isSinglePage, router, pathname]);
 
   const isFirstEntry = pathname === `/p/cover-2015`;
   const isLastEntry = pathname === `/p/12-${allYears()[allYears().length - 1]}`;
