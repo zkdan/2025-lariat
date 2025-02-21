@@ -77,6 +77,32 @@ export default function Nav() {
   const isFirstEntry = pathname === `/p/cover-2015`;
   const isLastEntry = pathname === `/p/12-${allYears()[allYears().length - 1]}`;
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if we're in an input field or not on a single page
+      if (e.target instanceof HTMLInputElement || !isSinglePage) return;
+
+      switch (e.key) {
+        case 'ArrowLeft':
+          if (!isFirstEntry) {
+            handleNavigation('prev');
+          }
+          break;
+        case 'ArrowRight':
+          if (!isLastEntry) {
+            handleNavigation('next');
+          }
+          break;
+        case 'Escape':
+          setIsOpen(prev => !prev);
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isSinglePage, isFirstEntry, isLastEntry, handleNavigation]);
+
   return (
     <div className="relative">
       <AnimatePresence>
