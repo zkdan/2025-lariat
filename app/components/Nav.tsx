@@ -2,33 +2,80 @@
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { usePathname, useRouter } from "next/navigation"
 import { allYears, months } from "@/app/utils/calendar";
-import { usePathname } from "next/navigation"
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
+
 type LinksRef = {
   [key: string]: HTMLAnchorElement | null;
 };
 
 export default function Nav() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
-
-  const pathname = usePathname()
+  const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
   const linksRef = useRef<LinksRef>({});
+  const isSinglePage = pathname.includes(`/p/`);
+  const lastFilterPage = useRef('/');
+
+  useEffect(() => {
+    if (!pathname.startsWith('/p/')) {
+      lastFilterPage.current = pathname;
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (pathname !== '/') {
       const activeLink = linksRef.current[pathname.split('/')[1]];
-
       if (activeLink) {
         activeLink.focus();
       }
     }
-    if (pathname.includes(`/p/`)) {
+  }, [pathname]);
+
+  useEffect(() => {
+    if (isSinglePage) {
       setIsOpen(false)
     }
-  }, [pathname]);
+  }, [isSinglePage]);
+
+  const handleNavigation = (direction: 'prev' | 'next') => {
+    if (!isSinglePage) return;
+
+    const currentPath = pathname.split('/p/')[1];
+
+    if (currentPath.startsWith('cover-')) {
+      const yearNum = parseInt(currentPath.split('-')[1]);
+      if (direction === 'next') {
+        router.push(`/p/01-${yearNum}`);
+      } else {
+        window.location.href = `/p/12-${yearNum - 1}`;
+      }
+      return;
+    }
+
+    const [month, year] = currentPath.split('-');
+    const monthNum = parseInt(month);
+    const yearNum = parseInt(year);
+
+    if (direction === 'next') {
+      if (monthNum === 12) {
+        router.push(`/p/cover-${yearNum + 1}`);
+      } else {
+        router.push(`/p/${(monthNum + 1).toString().padStart(2, '0')}-${yearNum}`);
+      }
+    } else {
+      if (monthNum === 1) {
+        router.push(`/p/cover-${yearNum}`);
+      } else {
+        router.push(`/p/${(monthNum - 1).toString().padStart(2, '0')}-${yearNum}`);
+      }
+    }
+  };
+
+  const isFirstEntry = pathname === `/p/cover-2015`;
+  const isLastEntry = pathname === `/p/12-${allYears()[allYears().length - 1]}`;
 
   return (
     <div className="relative">
@@ -91,25 +138,44 @@ export default function Nav() {
           </motion.nav>)}
       </AnimatePresence>
 
-      <div className="flex justify-center group focus:outline-none">
+      <div className="flex justify-between sticky top-0 z-10">
         <button
-          aria-label={isOpen ? "Close navigation" : "Open navigation"}
-          onClick={() => setIsOpen(!isOpen)}
-          className={`
-            hover:outline-dotted
-          focus:outline-dotted outline-1 flex-grow
-          lg:hidden transition-all duration-300 m-2 w-full text-center flex justify-center `}
+          onClick={() => handleNavigation('prev')}
+          className={`flex items-center hover:outline-dotted focus:outline-dotted outline-1 m-2 pr-2 basis-1/3 ${!isSinglePage || isFirstEntry ? 'invisible' : 'visible'}`}
+          aria-label="Previous image"
         >
-          <ChevronDownIcon
-            height={44}
-            width={44}
-            stroke='white'
-            className={`${isOpen ? 'rotate-180' : 'rotate-0 text-black top-0'}`}
+          <ChevronLeftIcon height={24} width={24} /> Previous
+        </button>
 
-          />
+        <div className="flex flex-grow justify-center group focus:outline-none">
+          <button
+            aria-label={isOpen ? "Close navigation" : "Open navigation"}
+            onClick={() => setIsOpen(!isOpen)}
+            className={`
+            hover:outline-dotted
+            focus:outline-dotted outline-1 flex-grow
+            transition-all duration-300 m-2 w-full text-center flex justify-center `}
+          >
+            {isOpen ? <ChevronUpIcon
+              height={44}
+              width={44}
+              stroke='white'
+            /> : (<ChevronDownIcon
+              height={44}
+              width={44}
+              stroke='white'
+            />)}
+          </button>
+        </div>
+
+        <button
+          onClick={() => handleNavigation('next')}
+          className={`flex items-center justify-end hover:outline-dotted focus:outline-dotted outline-1 m-2 pl-2 basis-1/3 ${!isSinglePage || isLastEntry ? 'invisible' : 'visible'}`}
+          aria-label="Next image"
+        >
+          Next <ChevronRightIcon height={24} width={24} />
         </button>
       </div>
-
     </div>
 
   )

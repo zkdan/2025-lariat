@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${roboto.variable} antialiased`}
+        className={`${roboto.variable} antialiased min-h-dvh`}
       >
         <header>
           <Link className="focus:outline-none group" href="/">

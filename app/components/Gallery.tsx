@@ -14,11 +14,12 @@ export default function Gallery({ filter }: { filter: string }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, delay: 0.1 }}
     >
-      {data.map(img => {
+      {data.map((img, index) => {
         return <li key={img.id} className="mb-10  w-[100%] sm:w-[50%] md:w-[25%] group focus:outline-none">
           <p className="capitalize text-gray-600  p-1">{`${img.name} ${img.year}`}</p>
           <Link
             href={`/p/${img.id}`}
+            // as={`/?id=${img.id}`}
             shallow
             className="w-full focus:outline-none relative group"
           >
@@ -33,8 +34,9 @@ export default function Gallery({ filter }: { filter: string }) {
                 (max-width: 1280px) 50vw,
                 (max-width: 1536px) 33vw,
                 25vw"
+              loading={index < 5 ? "eager" : "lazy"}
             />
-            <ArrowsPointingOutIcon className="group absolute top-0 invisible group-focus:visible group-hover:visible " height={30} fill='white' />
+            <ArrowsPointingOutIcon className="group absolute top-0 invisible group-focus:visible " height={30} fill='white' />
           </Link>
         </li>
       })}
