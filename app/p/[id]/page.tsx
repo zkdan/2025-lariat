@@ -1,7 +1,7 @@
 'use client'
-import { usePathname } from "next/navigation"
+import { notFound, usePathname } from "next/navigation"
 import Image from "next/image";
-import { months } from "@/app/utils/calendar";
+import { allYears, months } from "@/app/utils/calendar";
 import { motion } from "framer-motion";
 
 import { blurDataURL } from "@/app/utils/constructImageUrls";
@@ -12,6 +12,10 @@ export default function SinglePhoto() {
   const year = path.split('-')[1]
   const month = path.split("-")[0].slice(-2);
   const monthName = months[parseInt(month) - 1]
+
+  if (!allYears().includes(parseInt(year, 10)) || !months.includes(monthName)) {
+    notFound()
+  }
 
   const data = `https://storage.googleapis.com/lariat-images/${year}/${fileName}-thumb.JPG`
 
