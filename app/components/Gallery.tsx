@@ -4,24 +4,33 @@ import Link from "next/link";
 import { imageUrls } from "../utils/constructImageUrls";
 import { motion } from "framer-motion";
 import { ArrowsPointingOutIcon } from "@heroicons/react/16/solid";
+import { useLastFilterPage } from "../utils/useLastViewedPhoto";
+
 export default function Gallery({ filter }: { filter: string }) {
+  const [lastFilter, setLastFilter] = useLastFilterPage();
+
   const data = imageUrls.flat().filter(img => img.year === parseInt(filter) || img.name === filter)
 
+
   return (
-    <motion.ul
+    <ul
       className="flex flex-wrap mx-10 md:mx-20 mt-5"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3, delay: 0.1 }}
+
     >
       {data.map((img, index) => {
-        return <li key={img.id} className="mb-10  w-[100%] sm:w-[50%] md:w-[25%] group focus:outline-none">
+        return <motion.li key={img.id} className="mb-10  w-[100%] sm:w-[50%] md:w-[25%] group focus:outline-none"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
           <p className="capitalize text-gray-600  p-1">{`${img.name} ${img.year}`}</p>
           <Link
             href={`/p/${img.id}`}
-            // as={`/?id=${img.id}`}
             shallow
             className="w-full focus:outline-none relative group"
+            onClick={() => {
+              setLastFilter(filter)
+            }}
           >
             <Image
               alt={`Calendar image for ${img.name} ${img.year}`}
@@ -38,8 +47,8 @@ export default function Gallery({ filter }: { filter: string }) {
             />
             <ArrowsPointingOutIcon className="group absolute top-0 invisible group-focus:visible " height={30} fill='white' />
           </Link>
-        </li>
+        </motion.li>
       })}
-    </motion.ul>
+    </ul>
   )
 }
