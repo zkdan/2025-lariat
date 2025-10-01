@@ -6,9 +6,9 @@ import Gallery from "../components/Gallery"
 export default function FilteredImages() {
   const params: { filter: string } = useParams()
   const { filter } = params;
-  
+
   const isYear = allYears().map(year => year.toString()).includes(filter)
-  
+
   const isMonth = months.includes(filter)
   const isCover = filter === 'cover'
 
@@ -16,5 +16,5 @@ export default function FilteredImages() {
     redirect('/')
   }
 
-  return <Gallery filter={filter} />
+  return <Gallery filter={filter} images={[]} />
 }

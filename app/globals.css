@@ -11,3 +11,26 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+
+/* Smooth image loading transitions */
+img {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Ensure consistent image sizing */
+.image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+}
+
+/* Blur placeholder fade transition */
+.image-container img {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.image-container img.loaded {
+  opacity: 1;
+}

@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import Nav from "./components/Nav";
-
 import Logo from '@/app/components/Logo';
+import ServiceWorkerRegistration from './components/ServiceWorkerRegistration';
+
 const roboto = Roboto({
   variable: "--font-roboto",
   weight: ['300', "400", '700'],
   subsets: ['latin']
 });
-
 
 export const metadata: Metadata = {
   title: "Lariat",
@@ -26,6 +26,7 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} antialiased min-h-dvh`}
       >
+        <ServiceWorkerRegistration />
         <Logo />
         <Nav />
         {children}
