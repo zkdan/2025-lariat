@@ -3,7 +3,6 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import Nav from "./components/Nav";
 import Logo from '@/app/components/Logo';
-import ServiceWorkerRegistration from './components/ServiceWorkerRegistration';
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -26,7 +25,6 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} antialiased min-h-dvh`}
       >
-        <ServiceWorkerRegistration />
         <Logo />
         <Nav />
         {children}

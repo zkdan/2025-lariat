@@ -79,7 +79,6 @@ export default function Nav() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if we're in an input field or not on a single page
       if (e.target instanceof HTMLInputElement || !isSinglePage) return;
 
       switch (e.key) {
@@ -104,7 +103,7 @@ export default function Nav() {
   }, [isSinglePage, isFirstEntry, isLastEntry, handleNavigation]);
 
   return (
-    <div className="relative">
+    <div className="sticky md:relative top-0 z-10">
       <AnimatePresence>
         {isOpen && (
           <motion.nav
@@ -183,13 +182,11 @@ export default function Nav() {
             transition-all duration-300 m-2 w-full text-center flex justify-center `}
           >
             {isOpen ? <ChevronUpIcon
-              height={44}
-              width={44}
-              stroke='white'
+              height={30}
+              width={30}
             /> : (<ChevronDownIcon
-              height={44}
-              width={44}
-              stroke='white'
+              height={30}
+              width={30}
             />)}
           </button>
         </div>

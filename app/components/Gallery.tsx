@@ -12,18 +12,17 @@ interface GalleryProps {
   images: OptimizedImage[];
 }
 
-export default function Gallery({ filter, images }: GalleryProps) {
-  const [lastFilter, setLastFilter] = useLastFilterPage();
+export default function Gallery({ filter }: GalleryProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setLastFilter] = useLastFilterPage();
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const [missingImages, setMissingImages] = useState<Set<string>>(new Set());
   const filteredImages = getFilteredImagesFast(filter);
 
-  // Start background preloading after initial render
   useEffect(() => {
     const timer = setTimeout(() => {
       preloadOtherImages(filter);
-    }, 1000); // Wait 1 second after initial load
-
+    }, 1000);
     return () => clearTimeout(timer);
   }, [filter]);
 
@@ -50,11 +49,12 @@ export default function Gallery({ filter, images }: GalleryProps) {
           >
             <p className="capitalize text-gray-600 p-1">{`${img.name} ${img.year}`}</p>
             {missingImages.has(img.id) ? (
-              <div className="w-full focus:outline-none relative group">
+              <div className="w-full focus:outline-none relative group cursor-default">
                 <div className="image-container relative">
-                  <div className="w-full h-full bg-gray-50 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300">
-                    <p className="text-gray-500 text-sm text-center px-2">
-                      There is no image for {img.name}, {img.year}
+                  <div className="w-full h-full bg-gray-50 flex items-center justify-center ">
+                    <p className="text-gray-500 rounded-sm text-sm text-center px-2 border-2 border-dotted border-gray-300 h-full w-full flex items-center justify-center m-2 flex-col">
+                      there is no image for
+                      <span className="font-bold w-full">{img.name} {img.year}</span>
                     </p>
                   </div>
                 </div>
@@ -70,7 +70,7 @@ export default function Gallery({ filter, images }: GalleryProps) {
               >
                 <div className="image-container relative">
                   <Image
-                    alt={`Calendar image for ${img.name} ${img.year}`}
+                    alt={`Calendar image for ${img.name.toUpperCase()} ${img.year}`}
                     className={`cursor-zoom-in w-full h-full object-cover focus:outline-none group-focus:grayscale group-hover:grayscale group-focus:brightness-50 group-hover:brightness-50 ${loadedImages.has(img.id) ? 'loaded' : ''
                       }`}
                     style={{ transform: "translate3d(0, 0, 0)" }}
