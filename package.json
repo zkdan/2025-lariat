@@ -9,10 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@plaiceholder/next": "^3.0.0",
+    "framer-motion": "^12.3.1",
     "next": "15.1.6",
+    "node": "^24.8.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-hooks-global-state": "^2.1.0"
+    "react-hooks-global-state": "^2.1.0",
+    "sharp": "^0.34.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

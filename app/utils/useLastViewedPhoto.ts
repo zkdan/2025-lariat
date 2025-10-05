@@ -1,8 +1,12 @@
 import { createGlobalState } from "react-hooks-global-state";
 
-const initialState = { photoToScrollTo: null };
+const initialState = { 
+  lastFilterPage: '/'  
+};
+
 const { useGlobalState } = createGlobalState(initialState);
 
-export const useLastViewedPhoto = () => {
-  return useGlobalState("photoToScrollTo");
+
+export const useLastFilterPage = () => {
+  return useGlobalState("lastFilterPage");
 };

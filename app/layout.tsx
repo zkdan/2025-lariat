@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
-import Link from "next/link";
 import "./globals.css";
+import Nav from "./components/Nav";
+import Logo from '@/app/components/Logo';
 
 const roboto = Roboto({
   variable: "--font-roboto",
   weight: ['300', "400", '700'],
   subsets: ['latin']
 });
-
 
 export const metadata: Metadata = {
   title: "Lariat",
@@ -23,20 +23,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${roboto.variable} antialiased`}
+        className={`${roboto.variable} antialiased min-h-dvh`}
       >
-        <header>
-          <Link className="focus:outline-none focus:text-blue-300 hover:outline-none hover:text-blue-300" href="/">
-            <h1 className="flex justify-around text-5xl font-bold uppercase ">
-              <span className="letter">l</span>
-              <span className="letter">a</span>
-              <span className="letter">r</span>
-              <span className="letter">i</span>
-              <span className="letter">a</span>
-              <span className="letter">t</span>
-            </h1>
-          </Link>
-        </header>
+        <Logo />
+        <Nav />
         {children}
       </body>
     </html>
