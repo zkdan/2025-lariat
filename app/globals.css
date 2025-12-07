@@ -11,3 +11,30 @@ body {
   color: var(--foreground);
   background: var(--background);
 }
+
+img {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+}
+
+.image-container img {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.image-container img.loaded {
+  opacity: 1;
+}
+
+.h-screen-minus-nav {
+  height: calc(100vh - 94px);
+}
+.max-h-screen-minus-nav {
+  max-height: calc(100vh - 94px);
+}
