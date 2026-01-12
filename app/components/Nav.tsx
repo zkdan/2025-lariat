@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from "next/navigation"
 import { allYears, months } from "@/app/utils/calendar";
-import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
+import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 type LinksRef = {
   [key: string]: HTMLAnchorElement | null;

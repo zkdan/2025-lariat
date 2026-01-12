@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowsPointingOutIcon } from "@heroicons/react/16/solid";
+import { ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
 import { useLastFilterPage } from "../utils/useLastViewedPhoto";
 import { useEffect, useState } from "react";
 import { OptimizedImage, getFilteredImagesFast, preloadOtherImages } from "../utils/imageOptimization";
