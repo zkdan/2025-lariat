@@ -190,7 +190,8 @@ export default function Nav() {
                     className={`${isActive(`/${year}`) ? 'outline' : ''} p-2 my-1  border-1 outline-1
       text-2xl hover:outline-dotted focus:outline-dotted`}
                     key={year}
-                    href={`/${year}`}>
+                    href={`/${year}`}
+                    onClick={() => setIsOpen(false)}>
                     <li >{year}</li>
                   </Link>)
                 }
@@ -205,7 +206,8 @@ export default function Nav() {
               hover:decoration-dotted 
               focus:decoration-dotted 
               underline-offset-8 `}
-                  href="/cover">
+                  href="/cover"
+                  onClick={() => setIsOpen(false)}>
                   <li>cover</li>
                 </Link>
                 {months.map(month => (
@@ -220,7 +222,8 @@ export default function Nav() {
               focus:decoration-dotted 
               underline-offset-8 `}
                     key={month}
-                    href={`/${month.toLowerCase()}`}><li
+                    href={`/${month.toLowerCase()}`}
+                    onClick={() => setIsOpen(false)}><li
                     >{month}</li></Link>
                 ))}
               </ul>
