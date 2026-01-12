@@ -4,7 +4,8 @@ import Link from "next/link";
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from "next/navigation"
 import { allYears, months } from "@/app/utils/calendar";
-import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
+import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useLastFilterPage } from "@/app/utils/useLastViewedPhoto";
 
 type LinksRef = {
   [key: string]: HTMLAnchorElement | null;
@@ -17,24 +18,8 @@ export default function Nav() {
   const isActive = (path: string) => pathname === path;
   const linksRef = useRef<LinksRef>({});
   const isSinglePage = pathname.includes(`/p/`);
-  const lastFilterPage = useRef('/');
+  const [lastFilterPage] = useLastFilterPage();
 
-  useEffect(() => {
-    if (isSinglePage) {
-      setIsOpen(false);
-    } else {
-      const saved = localStorage.getItem('navMenuOpen');
-      if (saved !== null) {
-        setIsOpen(saved === 'true');
-      }
-    }
-  }, [isSinglePage]);
-
-  useEffect(() => {
-    if (!pathname.startsWith('/p/')) {
-      lastFilterPage.current = pathname;
-    }
-  }, [pathname]);
 
   useEffect(() => {
     if (pathname !== '/') {
@@ -46,22 +31,42 @@ export default function Nav() {
   }, [pathname]);
 
   useEffect(() => {
-    if (!isSinglePage) {
-      localStorage.setItem('navMenuOpen', String(isOpen));
+    if (isSinglePage) {
+      setIsOpen(false)
     }
-  }, [isOpen, isSinglePage]);
+  }, [isSinglePage]);
 
   const handleNavigation = useCallback((direction: 'prev' | 'next') => {
     if (!isSinglePage) return;
 
     const currentPath = pathname.split('/p/')[1];
+    const lastFilter = lastFilterPage?.replace('/', '') || '';
+    const isMonthFilter = months.includes(lastFilter);
 
     if (currentPath.startsWith('cover-')) {
-      const yearNum = parseInt(currentPath.split('-')[1]);
-      if (direction === 'next') {
-        router.push(`/p/01-${yearNum}`);
+      if (isMonthFilter) {
+        const monthIndex = months.indexOf(lastFilter);
+        const monthNum = (monthIndex + 1).toString().padStart(2, '0');
+        const yearNum = parseInt(currentPath.split('-')[1]);
+        const allYearsList = allYears();
+        const currentYearIndex = allYearsList.indexOf(yearNum);
+        
+        if (direction === 'next') {
+          if (currentYearIndex < allYearsList.length - 1) {
+            router.push(`/p/${monthNum}-${allYearsList[currentYearIndex + 1]}`);
+          }
+        } else {
+          if (currentYearIndex > 0) {
+            router.push(`/p/${monthNum}-${allYearsList[currentYearIndex - 1]}`);
+          }
+        }
       } else {
-        window.location.href = `/p/12-${yearNum - 1}`;
+        const yearNum = parseInt(currentPath.split('-')[1]);
+        if (direction === 'next') {
+          router.push(`/p/01-${yearNum}`);
+        } else {
+          window.location.href = `/p/12-${yearNum - 1}`;
+        }
       }
       return;
     }
@@ -70,54 +75,97 @@ export default function Nav() {
     const monthNum = parseInt(month);
     const yearNum = parseInt(year);
 
-    if (direction === 'next') {
-      if (monthNum === 12) {
-        router.push(`/p/cover-${yearNum + 1}`);
+    if (isMonthFilter) {
+      const allYearsList = allYears();
+      const currentYearIndex = allYearsList.indexOf(yearNum);
+      
+      if (direction === 'next') {
+        if (currentYearIndex < allYearsList.length - 1) {
+          router.push(`/p/${month.toString().padStart(2, '0')}-${allYearsList[currentYearIndex + 1]}`);
+        }
       } else {
-        router.push(`/p/${(monthNum + 1).toString().padStart(2, '0')}-${yearNum}`);
+        if (currentYearIndex > 0) {
+          router.push(`/p/${month.toString().padStart(2, '0')}-${allYearsList[currentYearIndex - 1]}`);
+        }
       }
     } else {
-      if (monthNum === 1) {
-        router.push(`/p/cover-${yearNum}`);
+      if (direction === 'next') {
+        if (monthNum === 12) {
+          router.push(`/p/cover-${yearNum + 1}`);
+        } else {
+          router.push(`/p/${(monthNum + 1).toString().padStart(2, '0')}-${yearNum}`);
+        }
       } else {
-        router.push(`/p/${(monthNum - 1).toString().padStart(2, '0')}-${yearNum}`);
+        if (monthNum === 1) {
+          router.push(`/p/cover-${yearNum}`);
+        } else {
+          router.push(`/p/${(monthNum - 1).toString().padStart(2, '0')}-${yearNum}`);
+        }
       }
     }
-  }, [isSinglePage, router, pathname]);
+  }, [isSinglePage, router, pathname, lastFilterPage]);
 
-  const isFirstEntry = pathname === `/p/cover-2015`;
-  const isLastEntry = pathname === `/p/12-${allYears()[allYears().length - 1]}`;
+  const lastFilter = lastFilterPage?.replace('/', '') || '';
+  const isMonthFilter = months.includes(lastFilter);
+  const allYearsList = allYears();
+  
+  let isFirstEntry = false;
+  let isLastEntry = false;
+  
+  if (isSinglePage) {
+    const currentPath = pathname.split('/p/')[1];
+    
+    if (isMonthFilter && !currentPath.startsWith('cover-')) {
+      const [month, year] = currentPath.split('-');
+      const yearNum = parseInt(year);
+      isFirstEntry = yearNum === allYearsList[0];
+      isLastEntry = yearNum === allYearsList[allYearsList.length - 1];
+    } else {
+      isFirstEntry = pathname === `/p/cover-2015`;
+      isLastEntry = pathname === `/p/12-${allYearsList[allYearsList.length - 1]}`;
+    }
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || !isSinglePage) return;
+      if (e.target instanceof HTMLInputElement) return;
 
-      switch (e.key) {
-        case 'ArrowLeft':
-          if (!isFirstEntry) {
-            handleNavigation('prev');
-          }
-          break;
-        case 'ArrowRight':
-          if (!isLastEntry) {
-            handleNavigation('next');
-          }
-          break;
-        case 'Escape':
-          setIsOpen(prev => {
-            const newState = !prev;
-            if (!isSinglePage) {
-              localStorage.setItem('navMenuOpen', String(newState));
+      if (isSinglePage) {
+        switch (e.key) {
+          case 'ArrowLeft':
+            if (!isFirstEntry) {
+              handleNavigation('prev');
             }
-            return newState;
-          });
-          break;
+            break;
+          case 'ArrowRight':
+            if (!isLastEntry) {
+              handleNavigation('next');
+            }
+            break;
+          case 'Escape': {
+            if (lastFilterPage && lastFilterPage !== '/') {
+              const filterPath = lastFilterPage.startsWith('/') ? lastFilterPage : `/${lastFilterPage}`;
+              router.push(filterPath);
+            } else {
+              const currentPath = pathname.split('/p/')[1];
+              const year = currentPath?.startsWith('cover-') 
+                ? currentPath.split('-')[1] 
+                : currentPath?.split('-')[1];
+              if (year) {
+                router.push(`/${year}`);
+              }
+            }
+            break;
+          }
+        }
+      } else if (e.key === 'Escape') {
+        setIsOpen(prev => !prev);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isSinglePage, isFirstEntry, isLastEntry, handleNavigation]);
+  }, [isSinglePage, isFirstEntry, isLastEntry, handleNavigation, pathname, router, lastFilterPage]);
 
   return (
     <div className="sticky md:relative top-0 z-10">
@@ -192,13 +240,7 @@ export default function Nav() {
         <div className="flex flex-grow justify-center group focus:outline-none">
           <button
             aria-label={isOpen ? "Close navigation" : "Open navigation"}
-            onClick={() => {
-              const newState = !isOpen;
-              setIsOpen(newState);
-              if (!isSinglePage) {
-                localStorage.setItem('navMenuOpen', String(newState));
-              }
-            }}
+            onClick={() => setIsOpen(!isOpen)}
             className={`
             hover:outline-dotted
             focus:outline-dotted outline-1 flex-grow
