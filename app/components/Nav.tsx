@@ -20,6 +20,17 @@ export default function Nav() {
   const lastFilterPage = useRef('/');
 
   useEffect(() => {
+    if (isSinglePage) {
+      setIsOpen(false);
+    } else {
+      const saved = localStorage.getItem('navMenuOpen');
+      if (saved !== null) {
+        setIsOpen(saved === 'true');
+      }
+    }
+  }, [isSinglePage]);
+
+  useEffect(() => {
     if (!pathname.startsWith('/p/')) {
       lastFilterPage.current = pathname;
     }
@@ -35,10 +46,10 @@ export default function Nav() {
   }, [pathname]);
 
   useEffect(() => {
-    if (isSinglePage) {
-      setIsOpen(false)
+    if (!isSinglePage) {
+      localStorage.setItem('navMenuOpen', String(isOpen));
     }
-  }, [isSinglePage]);
+  }, [isOpen, isSinglePage]);
 
   const handleNavigation = useCallback((direction: 'prev' | 'next') => {
     if (!isSinglePage) return;
@@ -93,7 +104,13 @@ export default function Nav() {
           }
           break;
         case 'Escape':
-          setIsOpen(prev => !prev);
+          setIsOpen(prev => {
+            const newState = !prev;
+            if (!isSinglePage) {
+              localStorage.setItem('navMenuOpen', String(newState));
+            }
+            return newState;
+          });
           break;
       }
     };
@@ -175,7 +192,13 @@ export default function Nav() {
         <div className="flex flex-grow justify-center group focus:outline-none">
           <button
             aria-label={isOpen ? "Close navigation" : "Open navigation"}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => {
+              const newState = !isOpen;
+              setIsOpen(newState);
+              if (!isSinglePage) {
+                localStorage.setItem('navMenuOpen', String(newState));
+              }
+            }}
             className={`
             hover:outline-dotted
             focus:outline-dotted outline-1 flex-grow
