@@ -5,6 +5,7 @@ import { allYears, months } from "@/app/utils/calendar";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { OptimizedImage } from "@/app/utils/imageOptimization";
+import { useGrayscale } from "@/app/utils/useLastViewedPhoto";
 
 export default function SinglePhoto() {
   const path = usePathname()
@@ -25,6 +26,7 @@ export default function SinglePhoto() {
 
   const [imageData, setImageData] = useState<OptimizedImage | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [grayscale] = useGrayscale();
 
   if (!allYears().includes(parseInt(year, 10)) || (!isCover && !months.includes(monthName))) {
     notFound()
@@ -72,7 +74,7 @@ export default function SinglePhoto() {
             width={imageData.width}
             height={imageData.height}
             alt={`Calendar image for ${imageData.name} ${imageData.year}`}
-            className={`md:drop-shadow-[25px_25px_35px_rgba(0,0,0,0.5)] transition-opacity duration-500 ease-in-out ${imageLoaded ? 'opacity-100' : 'opacity-0'
+            className={`md:drop-shadow-[25px_25px_35px_rgba(0,0,0,0.5)] transition-opacity duration-500 ease-in-out ${grayscale ? 'grayscale' : ''} ${imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
             style={{ transform: "translate3d(0, 0, 0)" }}
             priority

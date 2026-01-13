@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname, useRouter } from "next/navigation"
 import { allYears, months } from "@/app/utils/calendar";
 import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
-import { useLastFilterPage } from "@/app/utils/useLastViewedPhoto";
+import { useLastFilterPage, useGrayscale } from "@/app/utils/useLastViewedPhoto";
 
 type LinksRef = {
   [key: string]: HTMLAnchorElement | null;
@@ -19,6 +19,7 @@ export default function Nav() {
   const linksRef = useRef<LinksRef>({});
   const isSinglePage = pathname.includes(`/p/`);
   const [lastFilterPage] = useLastFilterPage();
+  const [grayscale, setGrayscale] = useGrayscale();
 
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function Nav() {
         const yearNum = parseInt(currentPath.split('-')[1]);
         const allYearsList = allYears();
         const currentYearIndex = allYearsList.indexOf(yearNum);
-        
+
         if (direction === 'next') {
           if (currentYearIndex < allYearsList.length - 1) {
             router.push(`/p/${monthNum}-${allYearsList[currentYearIndex + 1]}`);
@@ -78,7 +79,7 @@ export default function Nav() {
     if (isMonthFilter) {
       const allYearsList = allYears();
       const currentYearIndex = allYearsList.indexOf(yearNum);
-      
+
       if (direction === 'next') {
         if (currentYearIndex < allYearsList.length - 1) {
           router.push(`/p/${month.toString().padStart(2, '0')}-${allYearsList[currentYearIndex + 1]}`);
@@ -108,13 +109,13 @@ export default function Nav() {
   const lastFilter = lastFilterPage?.replace('/', '') || '';
   const isMonthFilter = months.includes(lastFilter);
   const allYearsList = allYears();
-  
+
   let isFirstEntry = false;
   let isLastEntry = false;
-  
+
   if (isSinglePage) {
     const currentPath = pathname.split('/p/')[1];
-    
+
     if (isMonthFilter && !currentPath.startsWith('cover-')) {
       const [month, year] = currentPath.split('-');
       const yearNum = parseInt(year);
@@ -148,8 +149,8 @@ export default function Nav() {
               router.push(filterPath);
             } else {
               const currentPath = pathname.split('/p/')[1];
-              const year = currentPath?.startsWith('cover-') 
-                ? currentPath.split('-')[1] 
+              const year = currentPath?.startsWith('cover-')
+                ? currentPath.split('-')[1]
                 : currentPath?.split('-')[1];
               if (year) {
                 router.push(`/${year}`);
@@ -176,9 +177,9 @@ export default function Nav() {
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden"
+            className="overflow-hidden relative"
           >
-            <nav className="bg-gradient-to-r from-[rgb(34,193,195)] to-[rgb(253,187,45)]  flex-wrap">
+            <nav className={`flex-wrap ${grayscale ? 'bg-gradient-to-r from-black to-gray-300 text-white' : 'bg-gradient-to-r from-[rgb(34,193,195)] to-[rgb(253,187,45)]'}`}>
               <ul className="flex justify-around text-lg flex-wrap lg:flex-nowrap">
                 {allYears().map(year =>
                   <Link
@@ -228,6 +229,17 @@ export default function Nav() {
                 ))}
               </ul>
             </nav>
+            <button
+              onClick={() => setGrayscale(!grayscale)}
+              className="absolute bottom-2 left-2 focus:outline-none z-20"
+              aria-label={grayscale ? "Disable grayscale" : "Enable grayscale"}
+              role="switch"
+              aria-checked={grayscale}
+            >
+              <div className={`w-14 h-7 rounded-full transition-all duration-200 ${grayscale ? 'bg-gradient-to-r from-[rgb(34,193,195)] to-[rgb(253,187,45)]' : 'bg-gradient-to-r from-black to-gray-300'}`}>
+                <div className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white transition-transform duration-200 ${grayscale ? 'translate-x-7' : 'translate-x-0'}`}></div>
+              </div>
+            </button>
           </motion.nav>)}
       </AnimatePresence>
 

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
-import { useLastFilterPage } from "../utils/useLastViewedPhoto";
+import { useLastFilterPage, useGrayscale } from "../utils/useLastViewedPhoto";
 import { useEffect, useState } from "react";
 import { OptimizedImage, getFilteredImagesFast, preloadOtherImages } from "../utils/imageOptimization";
 
@@ -15,6 +15,7 @@ interface GalleryProps {
 export default function Gallery({ filter }: GalleryProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setLastFilter] = useLastFilterPage();
+  const [grayscale] = useGrayscale();
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
   const [missingImages, setMissingImages] = useState<Set<string>>(new Set());
   const filteredImages = getFilteredImagesFast(filter);
@@ -71,7 +72,7 @@ export default function Gallery({ filter }: GalleryProps) {
                 <div className="image-container relative">
                   <Image
                     alt={`Calendar image for ${img.name.toUpperCase()} ${img.year}`}
-                    className={`cursor-zoom-in w-full h-full object-cover focus:outline-none group-focus:grayscale group-hover:grayscale group-focus:brightness-50 group-hover:brightness-50 ${loadedImages.has(img.id) ? 'loaded' : ''
+                    className={`cursor-zoom-in w-full h-full object-cover focus:outline-none ${grayscale ? 'grayscale' : ''} group-focus:grayscale group-hover:grayscale group-focus:brightness-50 group-hover:brightness-50 ${loadedImages.has(img.id) ? 'loaded' : ''
                       }`}
                     style={{ transform: "translate3d(0, 0, 0)" }}
                     src={img.miniUrl}
